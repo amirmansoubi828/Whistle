@@ -70,6 +70,8 @@ public class LVAdapter extends BaseAdapter {
 
         if (skySportsNewsArrayList.get(i).getDateTime() != null) {
             viewHolder.date.setText(dateTimeFormatter.print(skySportsNewsArrayList.get(i).getDateTime()));
+        } else {
+            viewHolder.date.setVisibility(View.INVISIBLE);
         }
 
         viewHolder.goToWebPage.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +84,7 @@ public class LVAdapter extends BaseAdapter {
         int maxW = Resources.getSystem().getDisplayMetrics().widthPixels;
         int maxH = maxW * 216 / 384;
         Picasso.get().load(skySportsNewsArrayList.get(i).getImgsrc())
+                .placeholder(R.mipmap.whistle)
                 .resize(maxW, maxH)
                 .centerCrop(Gravity.TOP)
                 .into(viewHolder.imageView);

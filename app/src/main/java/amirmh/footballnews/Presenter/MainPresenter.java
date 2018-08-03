@@ -18,7 +18,6 @@ public class MainPresenter {
     private amirmh.footballnews.View.MainActivity view;
     private SportClient sportClient;
     private Bus bus;
-    private ConnectionListener connectionListener ;
 
     private static String apiKey = "003ca25abdcc46d086b1fa46f7a67240";
     private static String fourFourTwo = "four-four-two";
