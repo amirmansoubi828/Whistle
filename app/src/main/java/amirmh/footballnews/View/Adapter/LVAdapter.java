@@ -83,7 +83,7 @@ public class LVAdapter extends BaseAdapter {
         });
         int maxW, maxH;
         if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            maxW = Resources.getSystem().getDisplayMetrics().heightPixels ;
+            maxW = Resources.getSystem().getDisplayMetrics().heightPixels * 10 / 9 ;
             maxH = maxW * 216 / 384;
         } else {
             maxW = Resources.getSystem().getDisplayMetrics().widthPixels;
