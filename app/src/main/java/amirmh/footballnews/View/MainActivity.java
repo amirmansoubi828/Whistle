@@ -6,9 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import com.squareup.otto.Subscribe;
+
+
 import java.util.ArrayList;
+
 import amirmh.footballnews.DataType.SkySportsNews;
+import amirmh.footballnews.Logger;
 import amirmh.footballnews.Model.RetrofitManager;
 import amirmh.footballnews.Presenter.MainPresenter;
 import amirmh.footballnews.R;
@@ -38,6 +43,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        if (savedInstanceState != null) {
+            Logger.i("source : " + String.valueOf(savedInstanceState.getInt("source")));
+            source = RetrofitManager.Source.values()[savedInstanceState.getInt("source")];
+            tabLayout.getTabAt(savedInstanceState.getInt("source")).select();
+        } else {
+            Logger.i("savedInstanceState == null");
+            source = RetrofitManager.Source.values()[tabLayout.getSelectedTabPosition()];
+        }
         presenter = new MainPresenter();
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -56,8 +69,11 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        source = RetrofitManager.Source.values()[tabLayout.getSelectedTabPosition()];
-        getNews();
+        if (savedInstanceState != null) {
+            updateListView((ArrayList<SkySportsNews>) savedInstanceState.getSerializable("array"));
+        } else {
+            getNews();
+        }
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -102,4 +118,13 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         presenter.detachView();
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Logger.i("");
+        outState.putInt("source", source.ordinal());
+        outState.putSerializable("array", lvAdapter.getSkySportsNewsArrayList());
+    }
+
 }

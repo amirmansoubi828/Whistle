@@ -3,12 +3,15 @@ package amirmh.footballnews.View.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 
 import com.squareup.picasso.Picasso;
@@ -80,9 +83,14 @@ public class LVAdapter extends BaseAdapter {
                 openWebPage(skySportsNewsArrayList.get(i).getLink());
             }
         });
-
-        int maxW = Resources.getSystem().getDisplayMetrics().widthPixels;
-        int maxH = maxW * 216 / 384;
+        int maxW, maxH;
+        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            maxW = Resources.getSystem().getDisplayMetrics().heightPixels ;
+            maxH = maxW * 216 / 384;
+        } else {
+            maxW = Resources.getSystem().getDisplayMetrics().widthPixels;
+            maxH = maxW * 216 / 384;
+        }
         Picasso.get().load(skySportsNewsArrayList.get(i).getImgsrc())
                 .placeholder(R.mipmap.whistle)
                 .resize(maxW, maxH)
@@ -91,8 +99,13 @@ public class LVAdapter extends BaseAdapter {
 
         return view;
     }
-    private void openWebPage(String url){
+
+    private void openWebPage(String url) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         context.startActivity(browserIntent);
+    }
+
+    public ArrayList<SkySportsNews> getSkySportsNewsArrayList() {
+        return skySportsNewsArrayList;
     }
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import amirmh.footballnews.DataType.NewsApiOrg;
 import amirmh.footballnews.DataType.SkySportsNews;
+import amirmh.footballnews.Logger;
 import amirmh.footballnews.Model.RetrofitManager;
 import amirmh.footballnews.Model.SportClient;
 import amirmh.footballnews.View.MainActivity;
@@ -39,6 +40,7 @@ public class MainPresenter {
     }
 
     public void getSkySports() {
+        Logger.i("");
         sportClient = RetrofitManager.createService(RetrofitManager.Source.SkySports);
         Call<ArrayList<SkySportsNews>> skySportNews = sportClient.getSkySportNews();
         skySportNews.enqueue(new Callback<ArrayList<SkySportsNews>>() {
@@ -56,6 +58,7 @@ public class MainPresenter {
     }
 
     public void getFourFourTwo() {
+        Logger.i("");
         sportClient = RetrofitManager.createService(RetrofitManager.Source.FourFourTwo);
         Call<NewsApiOrg> newsApiOrgNews = sportClient.getNewsApiOrgNews(fourFourTwo, 20, apiKey);
         newsApiOrgNews.enqueue(new Callback<NewsApiOrg>() {
@@ -74,6 +77,7 @@ public class MainPresenter {
     }
 
     public void getBleacherReport() {
+        Logger.i("");
         sportClient = RetrofitManager.createService(RetrofitManager.Source.BleacherReport);
         Call<NewsApiOrg> newsApiOrgNews = sportClient.getEveryThingNewsApiOrgNews(bleacherReport, 20, apiKey);
         newsApiOrgNews.enqueue(new Callback<NewsApiOrg>() {

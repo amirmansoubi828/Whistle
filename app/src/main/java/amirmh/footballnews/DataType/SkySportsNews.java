@@ -2,7 +2,9 @@ package amirmh.footballnews.DataType;
 
 import org.joda.time.DateTime;
 
-public class SkySportsNews {
+import java.io.Serializable;
+
+public class SkySportsNews implements Serializable {
     private String title , link , imgsrc , shortdesc  ;
     private DateTime dateTime ;
 
