@@ -1,5 +1,7 @@
 package amirmh.footballnews.View;
 
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,7 @@ import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
+import amirmh.footballnews.BCR;
 import amirmh.footballnews.DataType.SkySportsNews;
 import amirmh.footballnews.Logger;
 import amirmh.footballnews.Model.RetrofitManager;
@@ -38,11 +41,15 @@ public class MainActivity extends AppCompatActivity {
     @BindString(R.string.disconnected)
     String disconnected;
 
+    BroadcastReceiver bcr;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+
         if (savedInstanceState != null) {
             Logger.i("source : " + String.valueOf(savedInstanceState.getInt("source")));
             source = RetrofitManager.Source.values()[savedInstanceState.getInt("source")];
@@ -110,12 +117,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        bcr = new BCR();
+        registerReceiver(bcr, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
         presenter.attachView(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        unregisterReceiver(bcr);
         presenter.detachView();
     }
 
