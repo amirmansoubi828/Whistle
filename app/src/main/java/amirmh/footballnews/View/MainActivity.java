@@ -1,7 +1,6 @@
 package amirmh.footballnews.View;
 
-import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -14,10 +13,10 @@ import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
-import amirmh.footballnews.BCR;
 import amirmh.footballnews.DataType.SkySportsNews;
 import amirmh.footballnews.Logger;
 import amirmh.footballnews.Model.RetrofitManager;
+import amirmh.footballnews.Notification.NotificationService;
 import amirmh.footballnews.Presenter.MainPresenter;
 import amirmh.footballnews.R;
 import amirmh.footballnews.View.Adapter.LVAdapter;
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     @BindString(R.string.disconnected)
     String disconnected;
 
-    BroadcastReceiver bcr;
+    ///BroadcastReceiver bcr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        setUpNotificationService();
 
         if (savedInstanceState != null) {
             Logger.i("source : " + String.valueOf(savedInstanceState.getInt("source")));
@@ -117,15 +117,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        bcr = new BCR();
-        registerReceiver(bcr, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+        ///bcr = new BCR();
+        ///registerReceiver(bcr, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
         presenter.attachView(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(bcr);
+        ///unregisterReceiver(bcr);
         presenter.detachView();
     }
 
@@ -134,7 +134,16 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         Logger.i("");
         outState.putInt("source", source.ordinal());
-        outState.putSerializable("array", lvAdapter.getSkySportsNewsArrayList());
+        try {
+            outState.putSerializable("array", lvAdapter.getSkySportsNewsArrayList());
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void setUpNotificationService() {
+        Intent intent = new Intent(this, NotificationService.class);
+        startService(intent);
     }
 
 }

@@ -90,7 +90,7 @@ public class LVAdapter extends BaseAdapter {
             maxH = maxW * 216 / 384;
         }
         Picasso.get().load(skySportsNewsArrayList.get(i).getImgsrc())
-                .placeholder(R.mipmap.whistle)
+                .placeholder(R.mipmap.whisle)
                 .resize(maxW, maxH)
                 .centerCrop(Gravity.TOP)
                 .into(viewHolder.imageView);

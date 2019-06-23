@@ -7,9 +7,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/whistle"
+        android:icon="@mipmap/whisle"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/whistle"
+        android:roundIcon="@@mipmap/whisle"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".View.MainActivity">
@@ -30,6 +30,11 @@
                 android:resource="@xml/widget" />
         </receiver>
 
+
+        <service
+            android:name=".Notification.NotificationService"
+            android:enabled="true"
+            android:exported="false"/>
 
 
     </application>

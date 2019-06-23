@@ -1,22 +1,20 @@
-package amirmh.footballnews;
+package amirmh.footballnews.Notification;
 
-import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 
-public class BCR extends BroadcastReceiver {
+public class BCR extends BroadcastReceiver{
+
+    BCRListener bcrListener;
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
         String action = intent.getAction();
-        Logger.i("Whistle action: " + action);
         if (action.equals("android.net.conn.CONNECTIVITY_CHANGE")) {
-            Toast.makeText(context, "Changed Connection", Toast.LENGTH_SHORT).show();
+            bcrListener.OnInternetConnectionChange(ConnectionManager.isConnected(context));
         }
         // For our example, we'll also update all of the widgets when the timezone
         // changes, or the user or network sets the time.
@@ -29,5 +27,9 @@ public class BCR extends BroadcastReceiver {
          new WidgetConfigure().runUpdate();
 
          } **/
+    }
+
+    public void setBcrListener(BCRListener bcrListener) {
+        this.bcrListener = bcrListener;
     }
 }

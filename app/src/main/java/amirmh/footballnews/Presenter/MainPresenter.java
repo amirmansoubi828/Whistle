@@ -10,12 +10,14 @@ import amirmh.footballnews.DataType.SkySportsNews;
 import amirmh.footballnews.Logger;
 import amirmh.footballnews.Model.RetrofitManager;
 import amirmh.footballnews.Model.SportClient;
+import amirmh.footballnews.Notification.NotificationService;
 import amirmh.footballnews.View.MainActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainPresenter {
+    private NotificationService notificationService;
     private amirmh.footballnews.View.MainActivity view;
     private SportClient sportClient;
     private Bus bus;
@@ -29,6 +31,7 @@ public class MainPresenter {
         bus.register(this);
     }
 
+
     public void attachView(MainActivity view) {
         this.view = view;
         bus.register(this.view);
@@ -37,6 +40,16 @@ public class MainPresenter {
     public void detachView() {
         bus.unregister(view);
         this.view = null;
+    }
+
+    public void attachService(NotificationService service){
+        this.notificationService = service;
+        bus.register(service);
+    }
+
+    public void detachService(){
+        bus.unregister(notificationService);
+        this.notificationService = null;
     }
 
     public void getSkySports() {
