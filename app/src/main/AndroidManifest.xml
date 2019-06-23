@@ -9,7 +9,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/whisle"
         android:label="@string/app_name"
-        android:roundIcon="@@mipmap/whisle"
+        android:roundIcon="@mipmap/whisle"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".View.MainActivity">

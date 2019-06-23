@@ -59,7 +59,10 @@ public class NotificationService extends Service {
                 OnInternetConnectionChanged(isConnected);
             }
         });
-        registerReceiver(bcr, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(android.net.ConnectivityManager.CONNECTIVITY_ACTION);
+        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
+        registerReceiver(bcr, intentFilter);
     }
 
 

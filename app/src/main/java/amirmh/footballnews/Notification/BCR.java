@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import amirmh.footballnews.Logger;
+
 
 public class BCR extends BroadcastReceiver{
 
@@ -13,7 +15,8 @@ public class BCR extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
 
         String action = intent.getAction();
-        if (action.equals("android.net.conn.CONNECTIVITY_CHANGE")) {
+        Logger.i(action);
+        if (action.equals("android.net.conn.CONNECTIVITY_CHANGE") || action.equals("android.intent.action.SCREEN_ON")) {
             bcrListener.OnInternetConnectionChange(ConnectionManager.isConnected(context));
         }
         // For our example, we'll also update all of the widgets when the timezone

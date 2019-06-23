@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import amirmh.footballnews.Logger;
+
 public class ConnectionManager {
 
     static boolean isConnected(Context context) {
@@ -14,6 +16,7 @@ public class ConnectionManager {
             //we are connected to a network
             connected = true;
         }
+        //Logger.i(String.valueOf(connected));
         return connected;
     }
 }
