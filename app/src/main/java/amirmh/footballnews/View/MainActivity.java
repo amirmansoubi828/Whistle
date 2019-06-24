@@ -5,6 +5,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,7 +27,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
-
+    @BindView(R.id.main_btn_notification_setting)
+    Button notificationSettingButton;
     @BindView(R.id.rListView_main)
     ListView listView;
     private LVAdapter lvAdapter;
@@ -47,9 +50,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         setUpNotificationService();
-
         if (savedInstanceState != null) {
             Logger.i("source : " + String.valueOf(savedInstanceState.getInt("source")));
             source = RetrofitManager.Source.values()[savedInstanceState.getInt("source")];
@@ -85,6 +86,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 getNews();
+            }
+        });
+
+        notificationSettingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),NotificationSettingActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -136,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         outState.putInt("source", source.ordinal());
         try {
             outState.putSerializable("array", lvAdapter.getSkySportsNewsArrayList());
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

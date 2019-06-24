@@ -59,7 +59,9 @@ public class MainPresenter {
         skySportNews.enqueue(new Callback<ArrayList<SkySportsNews>>() {
             @Override
             public void onResponse(Call<ArrayList<SkySportsNews>> call, Response<ArrayList<SkySportsNews>> response) {
-                bus.post(response.body());
+                if (response.body() != null) {
+                    bus.post(response.body());
+                }
             }
 
             @Override

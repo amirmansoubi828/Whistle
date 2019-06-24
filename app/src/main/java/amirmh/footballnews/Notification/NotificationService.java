@@ -7,12 +7,11 @@ import android.app.Service;
 import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.AudioAttributes;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
@@ -23,11 +22,10 @@ import com.squareup.otto.Subscribe;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.ObjectInputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
@@ -108,11 +106,12 @@ public class NotificationService extends Service {
 
     private void makeNotification(ArrayList<SkySportsNews> newsArrayList) {
         Logger.i(newsArrayList.get(0).getTitle());
+        ArrayList<String> notifyWords = readNotifyWords();
         for (SkySportsNews skySportsNews :
                 newsArrayList) {
             String all_message = skySportsNews.getTitle() + " " + skySportsNews.getShortdesc();
             all_message = all_message.toLowerCase();
-            if (all_message.contains("manutd") || all_message.contains("manchester united") || all_message.contains("man utd")) {
+            if (checkWords(all_message, notifyWords)) {
                 try {
                     if (!isRepeatedNews(skySportsNews.getTitle())) {
                         saveLastNews(skySportsNews.getTitle());
@@ -163,8 +162,9 @@ public class NotificationService extends Service {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.whistle_icon)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.whistle_icon))
                 .setContentTitle(title)
-                .setContentText(content)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(content))
                 .setContentIntent(resultPendingIntent)
                 .setAutoCancel(true);
 
@@ -188,5 +188,29 @@ public class NotificationService extends Service {
         } else {
             return false;
         }
+    }
+
+    private ArrayList<String> readNotifyWords() {
+        try {
+            FileInputStream fileInputStream = openFileInput("notification_name");
+            ;
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            Object readObject = objectInputStream.readObject();
+            ArrayList<String> names = (ArrayList<String>) readObject;
+            objectInputStream.close();
+            return names;
+        } catch (Exception e) {
+            return new ArrayList<String>();
+        }
+    }
+
+    private boolean checkWords(String message, ArrayList<String> words) {
+        for (String word : words
+        ) {
+            if (message.contains(word.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".WidgetConfigure" />
+        <activity android:name=".View.NotificationSettingActivity" />
 
         <receiver android:name=".Widget" >
             <intent-filter>
