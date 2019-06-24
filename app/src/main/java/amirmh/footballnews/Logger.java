@@ -13,4 +13,10 @@ public class Logger {
         Log.i(stackTrace[3].getClassName(), stackTrace[3].getMethodName() + " : ");
     }
 
+    public static void i(Object message) {
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        Log.i(stackTrace[3].getClassName(), stackTrace[3].getMethodName() + " : " + String.valueOf(message));
+    }
+
+
 }

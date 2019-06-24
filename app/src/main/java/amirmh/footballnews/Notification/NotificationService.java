@@ -89,6 +89,8 @@ public class NotificationService extends Service {
             mainPresenter = new MainPresenter();
             mainPresenter.attachService(this);
             mainPresenter.getSkySports();
+            mainPresenter.getFourFourTwo();
+            mainPresenter.getBleacherReport();
             Logger.i("data requested");
         }
     }
@@ -113,16 +115,16 @@ public class NotificationService extends Service {
             all_message = all_message.toLowerCase();
             if (checkWords(all_message, notifyWords)) {
                 try {
-                    if (!isRepeatedNews(skySportsNews.getTitle())) {
-                        saveLastNews(skySportsNews.getTitle());
-                        notificationBuilder(skySportsNews.getTitle(), skySportsNews.getShortdesc());
+                    if (!isRepeatedNews(skySportsNews.getTitle(), skySportsNews.getLink())) {
+                        int id = saveLastNews(skySportsNews.getTitle(), skySportsNews.getLink());
+                        notificationBuilder(skySportsNews.getTitle(), skySportsNews.getShortdesc(), id);
                         Logger.i("notified");
                     }
                 } catch (IOException e) {
-                    notificationBuilder(skySportsNews.getTitle(), skySportsNews.getShortdesc());
+                    notificationBuilder(skySportsNews.getTitle(), skySportsNews.getShortdesc(), 4);
                     Logger.i("notified");
                     try {
-                        saveLastNews(skySportsNews.getTitle());
+                        saveLastNews(skySportsNews.getTitle(), skySportsNews.getLink());
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -133,10 +135,10 @@ public class NotificationService extends Service {
         }
     }
 
-    private void notificationBuilder(String title, String content) {
-
-        int NOTIFICATION_ID = 1;
-        String NOTIFICATION_CHANNEL_ID = "whistle";
+    private void notificationBuilder(String title, String content, int NOTIF_ID) {
+        Logger.i(String.valueOf(NOTIF_ID));
+        int NOTIFICATION_ID = NOTIF_ID;
+        String NOTIFICATION_CHANNEL_ID = "Whistle";
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -171,15 +173,17 @@ public class NotificationService extends Service {
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 
-    private void saveLastNews(String title) throws IOException {
-        FileOutputStream fileOutputStream = openFileOutput("notification", MODE_PRIVATE);
+    private int saveLastNews(String title, String link) throws IOException {
+        String source = determineSource(link);
+        FileOutputStream fileOutputStream = openFileOutput("notification_" + source, MODE_PRIVATE);
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
         outputStreamWriter.write(title);
         outputStreamWriter.close();
+        return source.charAt(0);
     }
 
-    private boolean isRepeatedNews(String title) throws IOException {
-        FileInputStream fileInputStream = openFileInput("notification");
+    private boolean isRepeatedNews(String title, String link) throws IOException {
+        FileInputStream fileInputStream = openFileInput("notification_" + determineSource(link));
         InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         String line = bufferedReader.readLine();
@@ -205,6 +209,9 @@ public class NotificationService extends Service {
     }
 
     private boolean checkWords(String message, ArrayList<String> words) {
+        if (words.size() == 0){
+            return true;
+        }
         for (String word : words
         ) {
             if (message.contains(word.toLowerCase())) {
@@ -212,5 +219,18 @@ public class NotificationService extends Service {
             }
         }
         return false;
+    }
+
+    private String determineSource(String link) {
+        String[] sites = new String[]{"bleacherreport", "skysports", "fourfourtwo"};
+        for (String site : sites
+        ) {
+            if (link.toLowerCase().contains(site)) {
+                Logger.i(site);
+                return site;
+            }
+        }
+        Logger.i("unknown");
+        return "unknown";
     }
 }
