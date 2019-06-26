@@ -108,6 +108,7 @@ public class NotificationService extends Service {
     @Subscribe
     public void updateListView(final ArrayList<SkySportsNews> newsArrayList) {
         Logger.i("data received : " + String.valueOf(newsArrayList.size()));
+        saveLastNewsObject(newsArrayList);
         makeNotification(newsArrayList);
     }
 
@@ -126,7 +127,6 @@ public class NotificationService extends Service {
             if (checkWords(all_message, notifyWords)) {
                 try {
                     if (!isRepeatedNews(skySportsNews.getTitle(), skySportsNews.getLink())) {
-                        saveLastNewsObject(skySportsNews);
                         notificationBuilder(skySportsNews.getTitle(), skySportsNews.getShortdesc(), skySportsNews.getLink(), skySportsNews.getImgsrc());
                     }
                 } catch (IOException e) {
@@ -315,11 +315,11 @@ public class NotificationService extends Service {
         }
     }
 
-    private void saveLastNewsObject(SkySportsNews skySportsNews) {
+    private void saveLastNewsObject(ArrayList<SkySportsNews> skySportsNewsArrayList) {
         try {
-            FileOutputStream fileOutputStream = openFileOutput("last_news_" + determineSource(skySportsNews.getLink()), MODE_PRIVATE);
+            FileOutputStream fileOutputStream = openFileOutput("last_news_" + determineSource(skySportsNewsArrayList.get(0).getLink()), MODE_PRIVATE);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(skySportsNews);
+            objectOutputStream.writeObject(skySportsNewsArrayList);
             objectOutputStream.close();
         } catch (Exception e) {
             e.printStackTrace();

@@ -117,20 +117,20 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
         String[] sources = {"skysports", "bleacherreport", "fourfourtwo"};
         for (String source : sources
         ) {
-            news.add(readNews(context, source));
+            news.addAll(readNews(context, source));
         }
         return news;
     }
 
-    private SkySportsNews readNews(Context context, String source) {
+    private ArrayList<SkySportsNews> readNews(Context context, String source) {
         try {
             FileInputStream fileInputStream = context.openFileInput("last_news_" + source);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            SkySportsNews skySportsNews = (SkySportsNews) objectInputStream.readObject();
+            ArrayList<SkySportsNews> skySportsNews = (ArrayList<SkySportsNews>) objectInputStream.readObject();
             objectInputStream.close();
             return skySportsNews;
         } catch (Exception e) {
-            return new SkySportsNews();
+            return new ArrayList<SkySportsNews>();
         }
     }
 
