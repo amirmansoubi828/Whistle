@@ -6,11 +6,16 @@
     android:weightSum="10">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/ns_textview_last_notify"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.25"
-        android:background="@color/colorPrimaryDark" />
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.5"
+        android:background="@color/colorPrimaryDark"
+        android:foregroundGravity="center_vertical"
+        android:gravity="center|center_vertical"
+        android:text="Last Notify : "
+        android:textColor="@color/colorAccent" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -64,7 +69,7 @@
         android:id="@+id/ns_notification_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="9"
+        android:layout_weight="8.75"
         android:background="@color/colorAccent"
         android:divider="@color/colorPrimaryDark"
         android:dividerHeight="1dp" />

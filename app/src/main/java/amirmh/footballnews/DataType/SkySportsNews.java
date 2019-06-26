@@ -4,6 +4,8 @@ import org.joda.time.DateTime;
 
 import java.io.Serializable;
 
+import amirmh.footballnews.Logger;
+
 public class SkySportsNews implements Serializable {
     private String title , link , imgsrc , shortdesc  ;
     private DateTime dateTime ;
@@ -14,6 +16,9 @@ public class SkySportsNews implements Serializable {
         this.imgsrc = imgsrc;
         this.shortdesc = shortdesc;
         this.dateTime = null ;
+        if(shortdesc == null){
+            this.shortdesc = title;
+        }
     }
     public SkySportsNews(String title, String link, String imgsrc, String shortdesc , DateTime dateTime) {
         this.title = title;
@@ -21,6 +26,17 @@ public class SkySportsNews implements Serializable {
         this.imgsrc = imgsrc;
         this.shortdesc = shortdesc;
         this.dateTime = dateTime ;
+        if(shortdesc == null){
+            this.shortdesc = title;
+        }
+    }
+
+    public SkySportsNews(){
+        this.title = "";
+        this.link = "";
+        this.imgsrc = "";
+        this.shortdesc = "";
+        this.dateTime = null ;
     }
 
 
@@ -53,6 +69,10 @@ public class SkySportsNews implements Serializable {
     }
 
     public void setShortdesc(String shortdesc) {
+        if(shortdesc == null){
+            this.shortdesc = title;
+            return;
+        }
         this.shortdesc = shortdesc;
     }
 

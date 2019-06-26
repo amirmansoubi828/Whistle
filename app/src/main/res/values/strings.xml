@@ -3,4 +3,7 @@
     <string name="check_connection">Please check connection</string>
     <string name="read_more"><u>Read more</u></string>
     <string name="disconnected">disconnected</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
 </resources>

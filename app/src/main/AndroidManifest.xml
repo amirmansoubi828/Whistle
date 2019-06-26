@@ -3,7 +3,7 @@
     package="amirmh.footballnews">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -12,32 +12,35 @@
         android:roundIcon="@mipmap/whisle"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver android:name=".Widget.WhistleWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/whistle_widget_info" />
+        </receiver>
+
         <activity android:name=".View.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WidgetConfigure" />
-        <activity android:name=".View.NotificationSettingActivity" />
-
-        <receiver android:name=".Widget" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
-                android:resource="@xml/widget" />
-        </receiver>
-
+        <activity
+            android:name=".View.NotificationSettingActivity"
+            android:windowSoftInputMode="adjustPan" />
 
         <service
             android:name=".Notification.NotificationService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
 
-
+        <service
+            android:name=".Widget.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>
